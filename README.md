@@ -7,3 +7,6 @@ FRs:
 NFRs:  
 1- authentication of user  
 2- performance of getting origin url from uniqueCode (may be with proxy pattern)  
+
+
+![Description of Image](https://github.com/sziarati/ShortLink/blob/main/shortLink.png?raw=true)  

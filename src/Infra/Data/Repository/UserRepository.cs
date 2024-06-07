@@ -87,14 +87,14 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
         return userFound;
     }
 
-    public async Task<ShortLink?> GetShortLinkAsync(decimal id)
+    public async Task<ShortLink?> GetShortLinkAsync(string uniqueCode)
     {
         var user = await _appDbContext.Users.Include(i => i.ShortLinks)
-                                             .Where(i => i.ShortLinks != null && i.ShortLinks.Any(i => i.Id == id))
+                                             .Where(i => i.ShortLinks != null && i.ShortLinks.Any(i => i.UniqueCode == uniqueCode))
                                              .FirstOrDefaultAsync();
 
         if (user?.ShortLinks?.Count > 0)
-            return user.ShortLinks.FirstOrDefault(i => i.Id == id);
+            return user.ShortLinks.FirstOrDefault(i => i.UniqueCode == uniqueCode);
 
         return null;
     }

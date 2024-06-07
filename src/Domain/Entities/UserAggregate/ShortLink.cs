@@ -55,7 +55,7 @@ public class ShortLink : BaseEntity
 
     public bool IsExpired()
     {
-        return _IsExpired || DateTime.Compare(ExpireDate, DateTime.Now) >= ExpiryDays;
+        return _IsExpired || DateTime.Compare(ExpireDate, DateTime.Now) <= ExpiryDays;
     }
 
     public ShortLinkExpiring Expire()

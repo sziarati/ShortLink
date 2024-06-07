@@ -12,5 +12,5 @@ public interface IUserRepository
     Task<IReadOnlyList<ShortLink>> GetAllShortLinksAsync();
     Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync();
     Task<User> GetByIdAsync(decimal id);
-    Task<ShortLink?> GetShortLinkAsync(decimal id);
+    Task<ShortLink?> GetShortLinkAsync(string uniqueCode);
 }

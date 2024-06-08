@@ -1,4 +1,4 @@
-﻿using Domain.Entities.UserAggregate;
+﻿using Domain.Entities.ShortLinkAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

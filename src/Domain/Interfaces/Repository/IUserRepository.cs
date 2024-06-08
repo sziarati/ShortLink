@@ -1,4 +1,5 @@
-﻿using Domain.Entities.UserAggregate;
+﻿using Domain.Entities.ShortLinkAggregate;
+using Domain.Entities.UserAggregate;
 
 namespace Domain.Interfaces.Repository;
 
@@ -12,5 +13,4 @@ public interface IUserRepository
     Task<IReadOnlyList<ShortLink>> GetAllShortLinksAsync();
     Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync();
     Task<User> GetByIdAsync(decimal id);
-    Task<ShortLink?> GetShortLinkAsync(string uniqueCode);
 }

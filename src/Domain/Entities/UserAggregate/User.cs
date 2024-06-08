@@ -1,6 +1,8 @@
 ﻿
 using Domain.Bases;
+using Domain.Entities.ShortLinkAggregate;
 using Domain.Entities.ValueObjects;
+using Domain.Enums;
 
 namespace Domain.Entities.UserAggregate;
 
@@ -10,7 +12,7 @@ public partial class User : BaseEntity, IAggregateRoot
     public string Email { get; private set; }
     public string Password { get; private set; }
     public Address Address { get; set; }
-    public byte State { get; private set; }
+    public UserStatus State { get; private set; }
 
     public IReadOnlyList<ShortLink>? ShortLinks => _ShortLinks;
     private List<ShortLink>? _ShortLinks { get; set; } = [];

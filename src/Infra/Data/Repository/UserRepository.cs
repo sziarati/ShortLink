@@ -1,4 +1,5 @@
-﻿using Domain.Entities.UserAggregate;
+﻿using Domain.Entities.ShortLinkAggregate;
+using Domain.Entities.UserAggregate;
 using Domain.Interfaces.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,26 +38,6 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
         var result = await _appDbContext.SaveChangesAsync();
         return result > 0;
     }
-    public async Task AddShortLinkAsync(decimal userId, string originUrl, DateTime expireDate)
-    {
-        var user = await GetByIdAsync(userId);
-        if (user != null)
-        {
-            user.AddShortLink(originUrl, expireDate);
-            await UpdateAsync(user);
-        }
-    }
-
-    public async Task RemoveShortLinkAsync(decimal userId, decimal shortLinkId)
-    {
-        var user = await GetByIdAsync(userId);
-        if (user != null)
-        {
-            user.RemoveShortLink(shortLinkId);
-            await UpdateAsync(user);
-        }
-    }
-
     public async Task<List<User>> GetAllAsync()
     {
         return await _appDbContext.Users.ToListAsync();

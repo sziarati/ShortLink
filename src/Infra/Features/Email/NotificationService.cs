@@ -1,4 +1,4 @@
-﻿using Domain.Interfaces.Services;
+﻿using Application.Interfaces.Services;
 
 namespace Infra.Features.Notification;
 

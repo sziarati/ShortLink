@@ -10,7 +10,5 @@ public interface IUserRepository
     Task<bool> UpdateAsync(User user);
 
     Task<List<User>> GetAllAsync();
-    Task<IReadOnlyList<ShortLink>> GetAllShortLinksAsync();
-    Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync();
     Task<User> GetByIdAsync(decimal id);
 }

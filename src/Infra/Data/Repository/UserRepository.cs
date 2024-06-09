@@ -43,23 +43,6 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
         return await _appDbContext.Users.ToListAsync();
     }
 
-    public async Task<IReadOnlyList<ShortLink>> GetAllShortLinksAsync()
-    {
-        var users = await _appDbContext.Users.Include(i => i.ShortLinks).ToListAsync();
-        List<ShortLink> shortLinks = new ();
-        users.ForEach(i => shortLinks.AddRange(i.ShortLinks));
-        return shortLinks;
-    }
-
-    public async Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync()
-    {
-        var users = await _appDbContext.Users.Include(i => i.ShortLinks)
-                                             .Where(i => i.ShortLinks != null && i.ShortLinks.Any(i => DateTime.Compare(i.ExpireDate, DateTime.Now) < 0 ))
-                                             .ToListAsync();
-        List<ShortLink> shortLinks = new();
-        users.ForEach(i => shortLinks.AddRange(i.ShortLinks));
-        return shortLinks;
-    }
     public async Task<User> GetByIdAsync(decimal id)
     {
         var userFound = await _appDbContext.Users.Where(i => i.Id == id)
@@ -68,15 +51,4 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
         return userFound;
     }
 
-    public async Task<ShortLink?> GetShortLinkAsync(string uniqueCode)
-    {
-        var user = await _appDbContext.Users.Include(i => i.ShortLinks)
-                                             .Where(i => i.ShortLinks != null && i.ShortLinks.Any(i => i.UniqueCode == uniqueCode))
-                                             .FirstOrDefaultAsync();
-
-        if (user?.ShortLinks?.Count > 0)
-            return user.ShortLinks.FirstOrDefault(i => i.UniqueCode == uniqueCode);
-
-        return null;
-    }
 }

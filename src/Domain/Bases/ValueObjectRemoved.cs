@@ -1,8 +1,8 @@
 ﻿namespace Domain.Bases;
 
-public abstract class ValueObject
+public abstract class ValueObjectRemoved
 {
-    protected static bool EqualOperator(ValueObject left, ValueObject right)
+    protected static bool EqualOperator(ValueObjectRemoved left, ValueObjectRemoved right)
     {
         if (ReferenceEquals(left, null) ^ ReferenceEquals(right, null))
         {
@@ -11,7 +11,7 @@ public abstract class ValueObject
         return ReferenceEquals(left, right) || left.Equals(right);
     }
 
-    protected static bool NotEqualOperator(ValueObject left, ValueObject right)
+    protected static bool NotEqualOperator(ValueObjectRemoved left, ValueObjectRemoved right)
     {
         return !EqualOperator(left, right);
     }
@@ -25,7 +25,7 @@ public abstract class ValueObject
             return false;
         }
 
-        var other = (ValueObject)obj;
+        var other = (ValueObjectRemoved)obj;
 
         return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
     }

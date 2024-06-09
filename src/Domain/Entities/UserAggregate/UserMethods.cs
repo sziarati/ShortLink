@@ -5,7 +5,7 @@ namespace Domain.Entities.UserAggregate;
 
 public partial class User
 {
-    public User(string userName, string email, string password)
+    public User(string userName, Email email, Password password)
     {
         CreateDate = DateTime.Now;
         UserName = userName;
@@ -13,7 +13,7 @@ public partial class User
         Password = password;
     }
 
-    public void Update(string userName, string email, string password, Address address)
+    public void Update(string userName, Email email, Password password, Address address)
     {
         EditDate = DateTime.Now;
         UserName = userName;

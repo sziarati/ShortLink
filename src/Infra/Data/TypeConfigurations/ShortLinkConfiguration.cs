@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infra.Data
+namespace Infra.Data.TypeConfigurations
 {
-    public class ShortLinkMap : IEntityTypeConfiguration<ShortLink>
+    public class ShortLinkConfiguration : IEntityTypeConfiguration<ShortLink>
     {
         public void Configure(EntityTypeBuilder<ShortLink> builder)
         {

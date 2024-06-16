@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Domain.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace Domain.Guards
 {
@@ -20,36 +21,36 @@ namespace Domain.Guards
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                throw new ArgumentException("Email cannot be null or empty.", parameterName);
+                throw new InvalidEmailException(nameof(parameterName));
             }
 
             if (!EmailRegex.IsMatch(email))
             {
-                throw new ArgumentException("Email is not in a correct format.", parameterName);
+                throw new InvalidEmailException(nameof(parameterName));
             }
         }
         public static void AgainstInvalidPassword(string password, string parameterName)
         {
             if (string.IsNullOrWhiteSpace(password))
             {
-                throw new ArgumentException("Password cannot be null or empty.", parameterName);
+                throw new InvalidPasswordException(nameof(parameterName));
             }
 
-            if (!EmailRegex.IsMatch(password))
+            if (!PasswordRegex.IsMatch(password))
             {
-                throw new ArgumentException("Password is not in a correct format.", parameterName);
+                throw new InvalidPasswordException(nameof(parameterName));
             }
         }
         public static void AgainstInvalidPostalCode(string postalCode, string parameterName)
         {
             if (string.IsNullOrWhiteSpace(postalCode))
             {
-                throw new ArgumentException("PostalCode cannot be null or empty.", parameterName);
+                throw new InvalidPostalCodeException(nameof(parameterName));
             }
 
             if (!PostalCodeRegex.IsMatch(postalCode))
             {
-                throw new ArgumentException("PostalCode is not in a correct format.", parameterName);
+                throw new InvalidPostalCodeException(nameof(parameterName));
             }
         }
     }

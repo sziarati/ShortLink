@@ -5,6 +5,10 @@ namespace Domain.Entities.UserAggregate;
 
 public partial class User
 {
+    public User()
+    {
+
+    }
     public User(string userName, Email email, Password password)
     {
         CreateDate = DateTime.Now;

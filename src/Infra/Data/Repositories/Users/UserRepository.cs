@@ -1,30 +1,26 @@
-﻿using Domain.Entities.ShortLinkAggregate;
-using Domain.Entities.UserAggregate;
-using Domain.Interfaces.Repository;
+﻿using Domain.Entities.UserAggregate;
+using Domain.Interfaces.Repository.Users;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infra.Data.Repository;
+namespace Infra.Data.Repositories.Users;
 
 public class UserRepository(AppDbContext appDbContext) : IUserRepository
 {
     private readonly AppDbContext _appDbContext = appDbContext;
 
-    public async Task<decimal> AddAsync(User user)
-    {        
+    public async Task AddAsync(User user)
+    {
         await _appDbContext.Users.AddAsync(user);
-        var result = await _appDbContext.SaveChangesAsync();
-
-        return result > 0 ? user.Id : default;
     }
 
     public async Task<bool> Delete(decimal id)
     {
         var userFound = await GetByIdAsync(id);
-        if (userFound != null)
-            _appDbContext.Users.Remove(userFound);
-
-        var result = await _appDbContext.SaveChangesAsync();
-        return result > 0;
+        if (userFound == null)
+            return false;
+        
+        _appDbContext.Users.Remove(userFound);
+        return true;
     }
 
     public async Task<bool> UpdateAsync(User user)
@@ -35,8 +31,8 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
 
         userFound = user;
         _appDbContext.Entry(userFound).State = EntityState.Modified;
-        var result = await _appDbContext.SaveChangesAsync();
-        return result > 0;
+
+        return true;
     }
     public async Task<List<User>> GetAllAsync()
     {
@@ -46,7 +42,7 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
     public async Task<User> GetByIdAsync(decimal id)
     {
         var userFound = await _appDbContext.Users.Where(i => i.Id == id)
-                                                 .Include(i => i.ShortLinks)                                                
+                                                 .Include(i => i.ShortLinks)
                                                  .FirstOrDefaultAsync();
         return userFound;
     }

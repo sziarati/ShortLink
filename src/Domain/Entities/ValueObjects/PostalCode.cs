@@ -10,4 +10,12 @@ public record PostalCode
         Guard.AgainstInvalidPostalCode(value, nameof(value));
         Value = value;
     }
+    public override string ToString()
+    {
+        return Value;
+    }
+    public static PostalCode FromString(string postalCodeString)
+    {
+        return new PostalCode(postalCodeString);
+    }
 }

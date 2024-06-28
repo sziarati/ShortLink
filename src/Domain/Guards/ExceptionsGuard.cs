@@ -1,11 +1,10 @@
-﻿using Domain.Entities.ValueObjects;
-using Domain.Exceptions;
+﻿using Domain.Exceptions;
 using Domain.Results;
 using System.Text.RegularExpressions;
 
 namespace Domain.Guards
 {
-    public static class Guard
+    public static class ExceptionsGuard
     {
         private static readonly Regex EmailRegex = new Regex(
             @"^[^@\s]+@[^@\s]+\.[^@\s]+$",
@@ -24,41 +23,40 @@ namespace Domain.Guards
             if (string.IsNullOrWhiteSpace(email))
             {
                 return Result<string>.Failure(DomainErrors.InvalidEmailError, email);
+                //throw new InvalidEmailException(nameof(parameterName));
             }
 
             if (!EmailRegex.IsMatch(email))
             {
                 return Result<string>.Failure(DomainErrors.InvalidEmailError, email);
+                //throw new InvalidEmailException(nameof(parameterName));
             }
 
             return Result<string>.Success(email);
         }
-        public static Result<string> AgainstInvalidPassword(string password, string parameterName)
+        public static void AgainstInvalidPassword(string password, string parameterName)
         {
             if (string.IsNullOrWhiteSpace(password))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPasswordError, password);
+                throw new InvalidPasswordException(nameof(parameterName));
             }
 
             if (!PasswordRegex.IsMatch(password))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPasswordError, password);
+                throw new InvalidPasswordException(nameof(parameterName));
             }
-            
-            return Result<string>.Success(password);
         }
-        public static Result<string> AgainstInvalidPostalCode(string postalCode, string parameterName)
+        public static void AgainstInvalidPostalCode(string postalCode, string parameterName)
         {
             if (string.IsNullOrWhiteSpace(postalCode))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPostalCodeError, postalCode);
+                throw new InvalidPostalCodeException(nameof(parameterName));
             }
 
             if (!PostalCodeRegex.IsMatch(postalCode))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPostalCodeError, postalCode);
+                throw new InvalidPostalCodeException(nameof(parameterName));
             }
-            return Result<string>.Success(postalCode);
         }
     }
 }

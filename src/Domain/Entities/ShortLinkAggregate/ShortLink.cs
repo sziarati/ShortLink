@@ -1,6 +1,5 @@
 ﻿using Domain.Bases;
 using Domain.Entities.UserAggregate;
-using System.Text;
 
 namespace Domain.Entities.ShortLinkAggregate;
 
@@ -15,7 +14,7 @@ public partial class ShortLink : BaseEntity, IAggregateRoot
     public string OriginUrl { get; private set; }
     public string UniqueCode { get; private set; }
 
-    public decimal UserId { get; private set; }
+    public uint UserId { get; private set; }
     public User User { get; private set; }
-    public bool IsExpired { get; private set; }    
+    public bool IsExpired { get; private set; } 
 }

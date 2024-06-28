@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.ShortLinkAggregate;
 using Domain.Entities.UserAggregate;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 

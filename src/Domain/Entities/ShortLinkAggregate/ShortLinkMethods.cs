@@ -4,9 +4,8 @@ namespace Domain.Entities.ShortLinkAggregate;
 
 public partial class ShortLink
 {
-    public ShortLink(uint userId, string name, string OriginUrl)
+    public ShortLink(string name, string OriginUrl)
     {
-        UserId = userId;
         Name = name;
         CreateDate = DateTime.Now;
         ExpireDate = DateTime.Now.AddDays(ExpiryDays);
@@ -45,7 +44,6 @@ public partial class ShortLink
     //        ExpireShortLink(shortLink);
     //    }
     //}
-
     public void ExpireShortLink(ShortLink shortLink)
     {
         if (shortLink != null)

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infra.Data.TypeConfigurations
+namespace Infra.Data.Configurations
 {
     public class ShortLinkConfiguration : IEntityTypeConfiguration<ShortLink>
     {
@@ -13,35 +13,41 @@ namespace Infra.Data.TypeConfigurations
 
             builder.Property(i => i.Id)
                 .IsRequired()
-                .HasColumnType("numeric(18,0)")
+                //.HasPrecision(18, 0)
+                //.HasColumnType("numeric(18,0)")// int
                 .ValueGeneratedOnAdd();
 
             builder.Property(i => i.Name)
                 .IsRequired()
-                .HasColumnType("nvarchar(50)");
+                .IsUnicode()
+                .HasMaxLength(50);//fluent interface
+                                  //.HasColumnType("nvarchar(50)");
 
             builder.Property(i => i.OriginUrl)
                 .IsRequired()
-                .HasColumnType("nvarchar(max)");
+                .HasMaxLength(255);
 
             builder.Property(i => i.UniqueCode)
                 .IsRequired()
-                .HasColumnType("nvarchar(50)");
+                .HasMaxLength(20);
 
             builder.Property(i => i.CreateDate)
                 .IsRequired()
-                .HasColumnType("datetime2");
+                .HasColumnType("datetime");
 
             builder.Property(i => i.EditDate)
-                .HasColumnType("datetime2");
+                .HasColumnType("datetime");
 
             builder.Property(i => i.ExpireDate)
-                .HasColumnType("datetime2");
+                .HasColumnType("datetime");
+
+            builder.Property(i => i.UserId);
 
             builder.HasOne(i => i.User)
                 .WithMany(i => i.ShortLinks)
                 .HasForeignKey(i => i.UserId)
                 .HasConstraintName("FK_ShortLink_User");
+
         }
     }
 }

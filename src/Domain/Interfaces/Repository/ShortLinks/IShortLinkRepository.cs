@@ -1,14 +1,15 @@
 ﻿using Domain.Entities.ShortLinkAggregate;
 
-namespace Domain.Interfaces.Repository;
+namespace Domain.Interfaces.Repository.ShortLinks;
 
 public interface IShortLinkRepository
 {
-    Task<decimal> AddAsync(ShortLink shortLink);
+    Task AddAsync(ShortLink shortLink);
     Task<bool> Delete(decimal id);
 
     Task<List<ShortLink>> GetAllAsync();
     Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync();
     Task<ShortLink> GetByIdAsync(decimal id);
-    Task<ShortLink?> GetShortLinkAsync(string uniqueCode);
+    Task<string> GetByUniqueCodeAsync(string uniqueCode, CancellationToken cancellationToken);
+
 }

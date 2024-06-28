@@ -10,4 +10,13 @@ public record Password
         Guard.AgainstInvalidPassword(value, nameof(value));
         Value = value;
     }
+
+    public override string ToString()
+    {
+        return Value;
+    }
+    public static Password FromString(string passwordString)
+    {
+        return new Password(passwordString);
+    }
 }

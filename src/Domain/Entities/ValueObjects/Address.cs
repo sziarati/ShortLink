@@ -9,5 +9,6 @@ namespace Domain.Entities.ValueObjects
         public string City { get; set; }
         public string Street { get; set; }
         public PostalCode PostalCode { get; set; }
+
     }
 }

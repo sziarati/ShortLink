@@ -1,11 +1,10 @@
-﻿using Domain.Entities.ShortLinkAggregate;
-using Domain.Entities.UserAggregate;
+﻿using Domain.Entities.UserAggregate;
 
-namespace Domain.Interfaces.Repository;
+namespace Domain.Interfaces.Repository.Users;
 
 public interface IUserRepository
 {
-    Task<decimal> AddAsync(User user);
+    Task AddAsync(User user);
     Task<bool> Delete(decimal id);
     Task<bool> UpdateAsync(User user);
 

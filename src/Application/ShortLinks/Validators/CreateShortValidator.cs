@@ -10,7 +10,7 @@ public class CreateShortValidator : AbstractValidator<CreateShortLinkCommand>
         RuleFor(command => command.Name)
             .NotEmpty();
 
-        RuleFor(command => command.OriginalUrl)
+        RuleFor(command => command.OriginUrl)
             .NotEmpty();
 
         RuleFor(command => command.UserId)

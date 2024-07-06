@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Compile Remove="Notification\NotificationService2.cs" />
-    <Compile Remove="ShortLinks\Handlers\ShortLinkQueryHandlers.cs" />
   </ItemGroup>
 
   <ItemGroup>

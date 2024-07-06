@@ -11,5 +11,6 @@ public interface IShortLinkRepository
     Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync();
     Task<ShortLink> GetByIdAsync(decimal id);
     Task<string> GetByUniqueCodeAsync(string uniqueCode, CancellationToken cancellationToken);
-
+    Task<string> GetByOriginUrlAsync(string originUrl, CancellationToken cancellationToken);
+    Task<bool> SetExpired(int id);
 }

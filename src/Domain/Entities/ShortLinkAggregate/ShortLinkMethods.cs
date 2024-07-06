@@ -4,16 +4,16 @@ namespace Domain.Entities.ShortLinkAggregate;
 
 public partial class ShortLink
 {
-    public ShortLink(string name, string OriginUrl)
+    public ShortLink(string name, string originUrl)
     {
         Name = name;
         CreateDate = DateTime.Now;
         ExpireDate = DateTime.Now.AddDays(ExpiryDays);
         IsExpired = false;
 
-        string uniqueCode = GenerateCode(OriginUrl);
+        string uniqueCode = GenerateCode(originUrl);
         UniqueCode = uniqueCode;
-        
+        OriginUrl = originUrl;
     }
     
     public static string GenerateCode(string url)
@@ -33,23 +33,27 @@ public partial class ShortLink
 
     public bool IsShortLinkExpired()
     {
-        return IsExpired || DateTime.Compare(ExpireDate, DateTime.Now) <= ExpiryDays;
+        return IsExpired || IsExpiredBasedOnExpiryDay();
     }
 
-    //public void CheckAndExpireShortLinks()
-    //{
-    //    var expiredLinks = ShortLinks?.Where(sl => sl.IsExpired());
-    //    foreach (var shortLink in expiredLinks ?? Enumerable.Empty<ShortLink>())
-    //    {
-    //        ExpireShortLink(shortLink);
-    //    }
-    //}
-    public void ExpireShortLink(ShortLink shortLink)
+    public bool IsExpiredBasedOnExpiryDay()
     {
-        if (shortLink != null)
-        {
+        return DateTime.Compare(CreateDate, DateTime.Now) <= ExpiryDays;
+    }
 
+    public void ExpireShortLink()
+    {
+        if (!IsExpired)
+        {
+            ExpireDate = DateTime.Now;
+            IsExpired = true;
         }
     }
-
+    public void CheckAndExpireShortLink()
+    {
+        if (DateTime.Compare(CreateDate, DateTime.Now) <= ExpiryDays)
+        {
+            ExpireShortLink();
+        }
+    }
 }

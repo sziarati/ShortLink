@@ -25,6 +25,14 @@ public class ShortLinkRepository(AppDbContext appDbContext) : IShortLinkReposito
         return true;
     }
 
+    public async Task<bool> SetExpired(int id)
+    {
+        var shortLink = await GetByIdAsync(id);
+        shortLink.ExpireShortLink();
+        _appDbContext.Entry(shortLink).State = EntityState.Modified;        
+        return true;
+    }
+
     public async Task<List<ShortLink>> GetAllAsync()
     {
         return await _appDbContext.ShortLinks.ToListAsync();
@@ -33,7 +41,7 @@ public class ShortLinkRepository(AppDbContext appDbContext) : IShortLinkReposito
     public async Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync()
     {
         var shortLinks = await _appDbContext.ShortLinks
-                                             .Where(i => DateTime.Compare(i.ExpireDate, DateTime.Now) <= 0)
+                                             .Where(i => i.IsExpiredBasedOnExpiryDay())
                                              .ToListAsync();
         return shortLinks;
     }
@@ -47,7 +55,17 @@ public class ShortLinkRepository(AppDbContext appDbContext) : IShortLinkReposito
     }
     public async Task<string> GetByUniqueCodeAsync(string uniqueCode, CancellationToken cancellationToken)
     {
-        var shortLink = await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.UniqueCode == uniqueCode, cancellationToken);
+        var shortLink = await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.UniqueCode == uniqueCode && !i.IsExpired, cancellationToken);
+        if (shortLink == null)
+            return "";
+
+        _appDbContext.ShortLinks.Update(shortLink);
+
+        return shortLink.OriginUrl;
+    }
+    public async Task<string> GetByOriginUrlAsync(string originUrl, CancellationToken cancellationToken)
+    {
+        var shortLink = await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.OriginUrl == originUrl, cancellationToken);
         if (shortLink == null)
             return "";
 

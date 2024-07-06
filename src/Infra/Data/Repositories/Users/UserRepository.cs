@@ -30,7 +30,8 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
             return false;
 
         userFound = user;
-        _appDbContext.Entry(userFound).State = EntityState.Modified;
+        _appDbContext.Set<User>().Attach(user);
+        _appDbContext.Set<User>().Entry(userFound).State = EntityState.Modified;
 
         return true;
     }

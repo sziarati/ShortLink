@@ -14,7 +14,7 @@ public partial class ShortLink : BaseEntity, IAggregateRoot
     public string OriginUrl { get; private set; }
     public string UniqueCode { get; private set; }
 
-    public uint UserId { get; private set; }
+    public int UserId { get; private set; }
     public User User { get; private set; }
     public bool IsExpired { get; private set; } 
 }

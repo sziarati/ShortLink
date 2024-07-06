@@ -2,5 +2,5 @@
 
 namespace Application.ShortLinks.Commands;
 
-public record DeleteShortLinkCommand(uint Id) : IRequest<bool>;
+public record DeleteShortLinkCommand(int Id) : IRequest<bool>;
 

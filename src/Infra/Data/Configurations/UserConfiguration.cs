@@ -25,12 +25,9 @@ namespace Infra.Data.Configurations
                 .HasMaxLength(50);
 
             builder.Property(i => i.CreateDate)
-                .IsRequired()
-                .HasColumnType("datetime");
+                .IsRequired();
 
-            builder.Property(i => i.EditDate)
-                .HasColumnType("datetime");
-
+            builder.Property(i => i.EditDate);
 
             var emailConverter = new ValueConverter<Email, string>(
                 v => v.ToString(),

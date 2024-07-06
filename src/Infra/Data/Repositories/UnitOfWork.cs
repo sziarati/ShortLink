@@ -1,14 +1,12 @@
-﻿using Domain.Interfaces.Repository;
-using Domain.Interfaces.Repository.ShortLinks;
-using Domain.Interfaces.Repository.Users;
+﻿using Domain.Entities.ShortLinkAggregate;
+using Domain.Entities.UserAggregate;
+using Domain.Interfaces.Repository;
 
 namespace Infra.Data.Repositories;
 
-public class UnitOfWork(AppDbContext dbContext, IShortLinkRepository shortLinkRepository, IUserRepository userRepository) : IUnitOfWork
+public class UnitOfWork(AppDbContext dbContext) : IUnitOfWork
 {
     private readonly AppDbContext _dbContext = dbContext;
-    public IShortLinkRepository _shortLinkRepository => shortLinkRepository;
-    public IUserRepository _userRepository => userRepository;
 
     public async Task<int> SaveChangesAsync()
     {

@@ -14,8 +14,18 @@ namespace Api.Controllers
         {
             var createResult = await mediator.Send(input);
             return createResult > 0 ?
-                   Results.BadRequest("Creation failed.") :
-                   Results.Created("/api/ShortLink", createResult);
+                   Results.Created("/api/ShortLink", createResult) :
+                   Results.BadRequest("Creation failed.");
+        }
+
+        [HttpDelete]
+        [Route("/api/ShortLink")]
+        public async Task<IResult> Delete([FromBody] DeleteShortLinkCommand input, IMediator mediator)
+        {
+            var result = await mediator.Send(input);
+            return result ?
+                    Results.Ok("/api/ShortLink") :
+                    Results.BadRequest("Creation failed.");
         }
 
         [HttpGet]
@@ -27,6 +37,5 @@ namespace Api.Controllers
                    Results.BadRequest("Creation failed.") :
                    Results.Created("/api/ShortLink", createResult);
         }
-
     }
 }

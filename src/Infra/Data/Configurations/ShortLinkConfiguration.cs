@@ -13,15 +13,12 @@ namespace Infra.Data.Configurations
 
             builder.Property(i => i.Id)
                 .IsRequired()
-                //.HasPrecision(18, 0)
-                //.HasColumnType("numeric(18,0)")// int
                 .ValueGeneratedOnAdd();
 
             builder.Property(i => i.Name)
                 .IsRequired()
                 .IsUnicode()
-                .HasMaxLength(50);//fluent interface
-                                  //.HasColumnType("nvarchar(50)");
+                .HasMaxLength(50);
 
             builder.Property(i => i.OriginUrl)
                 .IsRequired()
@@ -32,14 +29,11 @@ namespace Infra.Data.Configurations
                 .HasMaxLength(20);
 
             builder.Property(i => i.CreateDate)
-                .IsRequired()
-                .HasColumnType("datetime");
+                .IsRequired();
 
-            builder.Property(i => i.EditDate)
-                .HasColumnType("datetime");
+            builder.Property(i => i.EditDate);
 
-            builder.Property(i => i.ExpireDate)
-                .HasColumnType("datetime");
+            builder.Property(i => i.ExpireDate);
 
             builder.Property(i => i.UserId);
 
@@ -47,7 +41,6 @@ namespace Infra.Data.Configurations
                 .WithMany(i => i.ShortLinks)
                 .HasForeignKey(i => i.UserId)
                 .HasConstraintName("FK_ShortLink_User");
-
         }
     }
 }

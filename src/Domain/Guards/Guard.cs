@@ -1,6 +1,5 @@
-﻿using Domain.Entities.ValueObjects;
-using Domain.Exceptions;
-using Domain.Results;
+﻿using Domain.Results;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
 namespace Domain.Guards
@@ -19,45 +18,31 @@ namespace Domain.Guards
             @"^\d{10}$", 
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static Result<string> AgainstInvalidEmail(string email, string parameterName)
+        public static Result<string> AgainstInvalidEmail(string email, [CallerMemberName] string memberName = "")
         {
-            if (string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email) || !EmailRegex.IsMatch(email))
             {
-                return Result<string>.Failure(DomainErrors.InvalidEmailError, email);
-            }
-
-            if (!EmailRegex.IsMatch(email))
-            {
-                return Result<string>.Failure(DomainErrors.InvalidEmailError, email);
+                return Result<string>.Failure(DomainErrors.InvalidEmailError, $"{memberName} with value {email} in inValid");
             }
 
             return Result<string>.Success(email);
         }
-        public static Result<string> AgainstInvalidPassword(string password, string parameterName)
+        public static Result<string> AgainstInvalidPassword(string password, [CallerMemberName] string memberName = "")
         {
-            if (string.IsNullOrWhiteSpace(password))
+            if (string.IsNullOrWhiteSpace(password) || !PasswordRegex.IsMatch(password))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPasswordError, password);
+                return Result<string>.Failure(DomainErrors.InvalidPasswordError, $"{memberName} with value {password} in inValid");
             }
 
-            if (!PasswordRegex.IsMatch(password))
-            {
-                return Result<string>.Failure(DomainErrors.InvalidPasswordError, password);
-            }
-            
             return Result<string>.Success(password);
         }
-        public static Result<string> AgainstInvalidPostalCode(string postalCode, string parameterName)
+        public static Result<string> AgainstInvalidPostalCode(string postalCode, [CallerMemberName] string memberName = "")
         {
-            if (string.IsNullOrWhiteSpace(postalCode))
+            if (string.IsNullOrWhiteSpace(postalCode) || !PostalCodeRegex.IsMatch(postalCode))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPostalCodeError, postalCode);
+                return Result<string>.Failure(DomainErrors.InvalidPostalCodeError, $"{memberName} with value {postalCode} in inValid");
             }
 
-            if (!PostalCodeRegex.IsMatch(postalCode))
-            {
-                return Result<string>.Failure(DomainErrors.InvalidPostalCodeError, postalCode);
-            }
             return Result<string>.Success(postalCode);
         }
     }

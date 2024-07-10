@@ -1,4 +1,4 @@
-﻿using Domain.Results;
+﻿using Domain.Exceptions;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
@@ -18,32 +18,26 @@ namespace Domain.Guards
             @"^\d{10}$", 
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        public static Result<string> AgainstInvalidEmail(string email, [CallerMemberName] string memberName = "")
+        public static void AgainstInvalidEmail(string email, [CallerMemberName] string memberName = "")
         {
             if (string.IsNullOrWhiteSpace(email) || !EmailRegex.IsMatch(email))
             {
-                return Result<string>.Failure(DomainErrors.InvalidEmailError, $"{memberName} with value {email} in inValid");
+                throw new InvalidEmailException($"{memberName} with value {email} in inValid");
             }
-
-            return Result<string>.Success(email);
         }
-        public static Result<string> AgainstInvalidPassword(string password, [CallerMemberName] string memberName = "")
+        public static void AgainstInvalidPassword(string password, [CallerMemberName]  string memberName = "")
         {
             if (string.IsNullOrWhiteSpace(password) || !PasswordRegex.IsMatch(password))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPasswordError, $"{memberName} with value {password} in inValid");
+                throw new InvalidPasswordException($"{memberName} with value {password} in inValid");
             }
-
-            return Result<string>.Success(password);
         }
-        public static Result<string> AgainstInvalidPostalCode(string postalCode, [CallerMemberName] string memberName = "")
+        public static void AgainstInvalidPostalCode(string postalCode, [CallerMemberName] string memberName = "")
         {
             if (string.IsNullOrWhiteSpace(postalCode) || !PostalCodeRegex.IsMatch(postalCode))
             {
-                return Result<string>.Failure(DomainErrors.InvalidPostalCodeError, $"{memberName} with value {postalCode} in inValid");
+                throw new InvalidPostalCodeException($"{memberName} with value {postalCode} in inValid");
             }
-
-            return Result<string>.Success(postalCode);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Entities.UserAggregate;
+﻿using Domain.Entities.ShortLinkAggregate;
+using Domain.Entities.UserAggregate;
 using Domain.Interfaces.Repository.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
         var userFound = await GetByIdAsync(id);
         if (userFound == null)
             return false;
-        
+
         _appDbContext.Users.Remove(userFound);
         return true;
     }
@@ -47,5 +48,21 @@ public class UserRepository(AppDbContext appDbContext) : IUserRepository
                                                  .FirstOrDefaultAsync();
         return userFound;
     }
-
+    public async Task<User> GetByUserNameAsync(string userName)
+    {
+        var userFound = await _appDbContext.Users.Where(i => i.UserName == userName)
+                                                 .Include(i => i.ShortLinks)
+                                                 .FirstOrDefaultAsync();
+        return userFound;
+    }
+    public async Task<List<ShortLink>> GetUserShortLinksAsync(string userName, CancellationToken cancellationToken)
+    {
+        var userShortLinks = await _appDbContext.Users.Where(i => i.UserName == userName)
+                                                 .Include(i => i.ShortLinks)
+                                                 .Select(i => i.ShortLinks)
+                                                 .FirstOrDefaultAsync(cancellationToken);
+        return userShortLinks is not null ? 
+                            userShortLinks.ToList() : 
+                            Enumerable.Empty<ShortLink>().ToList();
+    }  
 }

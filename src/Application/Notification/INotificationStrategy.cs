@@ -2,5 +2,5 @@
 
 public interface INotificationStrategy
 {
-    public Task Send(string to, string message);
+    public Task Notify(string to, string message);
 }

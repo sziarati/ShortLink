@@ -1,11 +1,12 @@
-﻿using Application.Validator.Exceptions;
+﻿using Application.Results;
+using Application.Validator.Exceptions;
 using FluentValidation;
 using MediatR;
 
 namespace Application.Validator;
 
 public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators) 
-    : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest, new()
+    : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest, new() where TResponse : class
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators = validators;
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -25,7 +26,7 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
 
         if (errors.Any())
         {
-            throw new Exceptions.ValidationException(errors);
+            Result<TResponse>.Failure(Errors.ValidationError);
         }
 
         var response = await next();

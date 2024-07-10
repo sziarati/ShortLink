@@ -5,7 +5,7 @@ namespace Application.SMS;
 
 public class SmsNotificationStrategy(ISmsProviderService smsProvider) : INotificationStrategy
 {
-    public async Task Send(string to, string message)
+    public async Task Notify(string to, string message)
     {
         await smsProvider.Send(to, message);
     }

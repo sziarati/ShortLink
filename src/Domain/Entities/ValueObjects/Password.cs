@@ -19,4 +19,14 @@ public record Password
     {
         return new Password(passwordString);
     }
+
+    public bool Equal(object? password)
+    {
+        if (password == null || password.GetType() != typeof(Password))
+            return false;
+
+        var _password = password as Password;
+
+        return _password?.Value == Value;
+    }
 }

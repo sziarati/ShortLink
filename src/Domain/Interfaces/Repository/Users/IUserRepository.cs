@@ -1,4 +1,5 @@
-﻿using Domain.Entities.UserAggregate;
+﻿using Domain.Entities.ShortLinkAggregate;
+using Domain.Entities.UserAggregate;
 
 namespace Domain.Interfaces.Repository.Users;
 
@@ -10,4 +11,6 @@ public interface IUserRepository
 
     Task<List<User>> GetAllAsync();
     Task<User> GetByIdAsync(decimal id);
+    Task<User> GetByUserNameAsync(string userName);
+    Task<List<ShortLink>> GetUserShortLinksAsync(string userName, CancellationToken cancellationToken);
 }

@@ -5,7 +5,7 @@ namespace Application.Email;
 
 public class EmailNotificationStrategy(IEmailService emailService) : INotificationStrategy
 {
-    public async Task Send(string to, string message)
+    public async Task Notify(string to, string message)
     {
         await emailService.Send(to, message);
     }

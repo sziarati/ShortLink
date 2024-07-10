@@ -41,8 +41,9 @@ public class ShortLinkRepository(AppDbContext appDbContext) : IShortLinkReposito
     public async Task<IReadOnlyList<ShortLink>> GetAllExpiredShortLinksAsync()
     {
         var shortLinks = await _appDbContext.ShortLinks
-                                             .Where(i => i.IsExpiredBasedOnExpiryDay())
-                                             .ToListAsync();
+                                            .Where(i => DateTime.Compare(i.CreateDate, DateTime.Now) <= 2 /*ExpiryDays*/)
+                                            .Include(i => i.User)
+                                            .ToListAsync();
         return shortLinks;
     }
 
@@ -53,24 +54,12 @@ public class ShortLinkRepository(AppDbContext appDbContext) : IShortLinkReposito
                                                     .FirstOrDefaultAsync();
         return userFound;
     }
-    public async Task<string> GetByUniqueCodeAsync(string uniqueCode, CancellationToken cancellationToken)
+    public async Task<ShortLink> GetByUniqueCodeAsync(string uniqueCode, CancellationToken cancellationToken)
     {
-        var shortLink = await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.UniqueCode == uniqueCode && !i.IsExpired, cancellationToken);
-        if (shortLink == null)
-            return "";
-
-        _appDbContext.ShortLinks.Update(shortLink);
-
-        return shortLink.OriginUrl;
+        return await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.UniqueCode == uniqueCode && !i.IsExpired, cancellationToken);
     }
-    public async Task<string> GetByOriginUrlAsync(string originUrl, CancellationToken cancellationToken)
+    public async Task<ShortLink> GetByOriginUrlAsync(string originUrl, CancellationToken cancellationToken)
     {
-        var shortLink = await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.OriginUrl == originUrl, cancellationToken);
-        if (shortLink == null)
-            return "";
-
-        _appDbContext.ShortLinks.Update(shortLink);
-
-        return shortLink.OriginUrl;
+        return await _appDbContext.ShortLinks.FirstOrDefaultAsync(i => i.OriginUrl == originUrl, cancellationToken);
     }
 }

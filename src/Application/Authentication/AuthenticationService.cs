@@ -1,40 +1,64 @@
 ﻿using Application.Results;
-using Domain.Entities.UserAggregate;
 using Domain.Entities.ValueObjects;
 using Domain.Interfaces.Repository.Users;
-using System.Text.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace Application.Authentication;
 
-public class AuthenticationService(IUserRepository userRepository) : IAuthenticationService
+public class AuthenticationService : IAuthenticationService
 {
-    private readonly IUserRepository _userRepository = userRepository;
-    public async Task<Result<Token>> Login(string userName, Password password)
+    private readonly IUserRepository _userRepository;
+    private readonly HttpContext _httpContext;
+    private readonly Authentications _authenticationConfigs;
+
+    public AuthenticationService(IUserRepository userRepository, IOptions<FeatureConfigurations> options, IHttpContextAccessor httpContextAccessor)
+    {
+        _userRepository = userRepository;
+        _httpContext = httpContextAccessor.HttpContext;
+        _authenticationConfigs = options.Value.Authentications;
+    }
+
+    public async Task<Result<string>> Login(string userName, Password password)
     {
         var user = await _userRepository.GetByUserNameAsync(userName);
-
-        if (!user.Password.Equals(password))
+        
+        if (user is null || !user.Password.Equals(password))
         {
-            return Result<Token>.Failure(Errors.LoginFailedError);
+            return Result<string>.Failure(Errors.LoginFailedError);
         }
 
-        var token = CreateJWTToken(user);
-        return Result<Token>.Success(token);
+        var token = new JWTTokenBuilder()
+            .WithSigningCredentials(_authenticationConfigs.JWTKey, SecurityAlgorithms.HmacSha256Signature)
+            .ExpireAt(_authenticationConfigs.Timeout)
+            .AddClaim(new Claim(ClaimTypes.Name, user.UserName))
+            .AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()))
+            .Build();
+
+        return Result<string>.Success(token);
     }
-    private Token CreateJWTToken(User user)
+    public Result<CurrentUser> GetCurrentUser()
     {
-        var token = new Token // todo jwt , remove password
+        var token = "";
+        token = GetTokenFromHttpContext(token);
+
+        var validateTokenResult = JWTTokenBuilder.ValidateTokenAsync(token, _authenticationConfigs.JWTKey);
+
+        return validateTokenResult.IsSuccess ?
+            Result<CurrentUser>.Success(validateTokenResult.Data) :
+            Result<CurrentUser>.Failure(Errors.TokenIsInvalidError);
+    }
+    private string GetTokenFromHttpContext(string token)
+    {
+        var authorizationHeader = _httpContext.Request.Headers["Authorization"].ToString();
+
+        if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
         {
-            AccessToken = JsonSerializer.Serialize(user),
-        };
+            token = authorizationHeader.Substring("Bearer ".Length).Trim();
+        }
 
         return token;
-    }
-    public Result<CurrentUser> GetCurrentUser(Token token)
-    {
-        var currentUser = JsonSerializer.Deserialize<CurrentUser>(token.AccessToken);
-        return currentUser is null ?
-            Result<CurrentUser>.Failure(Errors.LoginFailedError) :
-            Result<CurrentUser>.Success(currentUser);
     }
 }

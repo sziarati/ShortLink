@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Domain.Events.ShortLinkExpired;
+using System.Text;
 
 namespace Domain.Entities.ShortLinkAggregate;
 
@@ -48,6 +49,7 @@ public partial class ShortLink
         {
             ExpireDate = DateTime.Now;
             IsExpired = true;
+            AddEvent(new ShortLinkExpiredEvent(this));
         }
     }
     public void CheckAndExpireShortLink()

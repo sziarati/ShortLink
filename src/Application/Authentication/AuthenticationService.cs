@@ -39,12 +39,12 @@ public class AuthenticationService : IAuthenticationService
 
         return Result<string>.Success(token);
     }
-    public Result<CurrentUser> GetCurrentUser()
+    public async Task<Result<CurrentUser>> GetCurrentUser()
     {
         var token = "";
         token = GetTokenFromHttpContext(token);
 
-        var validateTokenResult = JWTTokenBuilder.ValidateTokenAsync(token, _authenticationConfigs.JWTKey);
+        var validateTokenResult = await JWTTokenBuilder.ValidateTokenAsync(token, _authenticationConfigs.JWTKey);
 
         return validateTokenResult.IsSuccess ?
             Result<CurrentUser>.Success(validateTokenResult.Data) :

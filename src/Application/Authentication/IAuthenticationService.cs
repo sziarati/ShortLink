@@ -6,5 +6,5 @@ namespace Application.Authentication;
 public interface IAuthenticationService
 {
     Task<Result<string>> Login(string username, Password password);
-    Result<CurrentUser> GetCurrentUser();
+    Task<Result<CurrentUser>> GetCurrentUser();
 }

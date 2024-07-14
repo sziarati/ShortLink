@@ -3,5 +3,5 @@ using MediatR;
 
 namespace Application.ShortLinks.Delete;
 
-public record DeleteShortLinkCommand(int Id) : IRequest<bool>;
+public record DeleteShortLinkCommand(int Id) : IRequest<Result<bool>>;
 

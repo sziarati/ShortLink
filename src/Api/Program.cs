@@ -1,27 +1,33 @@
-using Api.MiddleWare;
+using Api;
+using Api.ExceptionHandler;
 using Application.DependencyExtension;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
 });
 
-builder.Services.RegisterApplicationServices();
+builder.Services.Configure<AppSettings>(builder.Configuration);
+
+builder.Services.RegisterApplicationServices(builder.Configuration);
 builder.Services.RegisterInfraServices(builder.Configuration);
 
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionMiddleware>();
+app.UseExceptionHandler();
 
 // Configure the HTTP request pipeline.
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

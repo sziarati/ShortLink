@@ -16,7 +16,7 @@ public class CreateShortLinkHandler(
 {
     public async Task<Result<ShortLink>> Handle(CreateShortLinkCommand request, CancellationToken cancellationToken)
     {
-        var userResult = authenticationService.GetCurrentUser(new Token { AccessToken = "" }); //todo
+        var userResult = await authenticationService.GetCurrentUser(); //todo
         if (!userResult.IsSuccess)
             return Result<ShortLink>.Failure(Errors.LoginFailedError);
 

@@ -1,6 +1,6 @@
 ﻿namespace Application.Results;
 
-public class Result<T> where T : class
+public class Result<T> //where T : class
 {
     public Result(bool isSuccess, Errors error)
     {
@@ -8,7 +8,7 @@ public class Result<T> where T : class
         Error = error;
         Message = Error.Value;
     }
-    public Result(bool isSuccess, T? data = null)
+    public Result(bool isSuccess, T? data)
     {
         IsSuccess = isSuccess;
         Message = string.Empty;

@@ -8,6 +8,7 @@ public class Errors
         Value = value;
     }
 
+    public static Errors DeleteError = new Errors($"Delete Failed!");
     public static Errors CreationError = new Errors($"Creation Failed!");
     public static Errors NotFoundError = new Errors($"NotFound!");
     public static Errors ValidationError = new Errors($"your input is invalid!");
@@ -18,5 +19,5 @@ public class Errors
     public static Errors InvalidPasswordError = new Errors($"Password Is Empty or Invalid!");
     public static Errors InvalidRepeatedPasswordError = new Errors($"Password Repeat Is Invalid!");
     public static Errors InvalidPostalCodeError = new Errors($"PostalCode Is not in a correct format!");
-
+    public static Errors ExpireShortLinkError = new Errors($"PostalCode Is not in a correct format!");
 }

@@ -2,6 +2,7 @@
 using Application.Validator.Exceptions;
 using FluentValidation;
 using MediatR;
+using System.Text.Json;
 
 namespace Application.Validator;
 
@@ -26,7 +27,8 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
 
         if (errors.Any())
         {
-            Result<TResponse>.Failure(Errors.ValidationError);
+            var serializedErrors = JsonSerializer.Serialize(errors);
+            throw new Exception(serializedErrors);
         }
 
         var response = await next();

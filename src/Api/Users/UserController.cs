@@ -1,4 +1,5 @@
-﻿using Application.Users.Create;
+﻿using Application.Notification;
+using Application.Users.Create;
 using Application.Users.Delete;
 using Application.Users.Login;
 using Application.Users.ResetPassword;
@@ -10,13 +11,14 @@ namespace Api.Users
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class UserController(IMediator mediator) : ControllerBase
+    public class UserController(IMediator mediator, INotificationService notificationService) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand input)
         {
+            await notificationService.Notify("", "", NotificationType.Email);
             var createResult = await _mediator.Send(input);
             return createResult.IsSuccess ?
                    Created("/api/User", createResult.Data) :

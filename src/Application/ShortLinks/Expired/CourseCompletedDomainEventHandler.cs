@@ -15,6 +15,6 @@ public class CourseCompletedDomainEventHandler(IShortLinkRepository shortLinkRep
         var user = shortLink.User;
         await _notificationService.Notify(user.Email.Value, $"dear {user.UserName} your link {shortLink.UniqueCode} has been expired.", NotificationType.Email);
 
-        await _shortLinkRepository.SetExpired(shortLink.Id);
+        //await _shortLinkRepository.SetExpired(shortLink.Id);
     }
 }

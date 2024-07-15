@@ -1,7 +1,6 @@
 ﻿using Application.Results;
 using Domain.Entities.ValueObjects;
 using Domain.Interfaces.Repository.Users;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
@@ -11,13 +10,11 @@ namespace Application.Authentication;
 public class AuthenticationService : IAuthenticationService
 {
     private readonly IUserRepository _userRepository;
-    private readonly HttpContext _httpContext;
     private readonly Authentications _authenticationConfigs;
 
-    public AuthenticationService(IUserRepository userRepository, IOptions<FeatureConfigurations> options, IHttpContextAccessor httpContextAccessor)
+    public AuthenticationService(IUserRepository userRepository, IOptions<FeatureConfigurations> options)
     {
         _userRepository = userRepository;
-        _httpContext = httpContextAccessor.HttpContext;
         _authenticationConfigs = options.Value.Authentications;
     }
 
@@ -38,27 +35,5 @@ public class AuthenticationService : IAuthenticationService
             .Build();
 
         return Result<string>.Success(token);
-    }
-    public async Task<Result<CurrentUser>> GetCurrentUser()
-    {
-        var token = "";
-        token = GetTokenFromHttpContext(token);
-
-        var validateTokenResult = await JWTTokenBuilder.ValidateTokenAsync(token, _authenticationConfigs.JWTKey);
-
-        return validateTokenResult.IsSuccess ?
-            Result<CurrentUser>.Success(validateTokenResult.Data) :
-            Result<CurrentUser>.Failure(Errors.TokenIsInvalidError);
-    }
-    private string GetTokenFromHttpContext(string token)
-    {
-        var authorizationHeader = _httpContext.Request.Headers["Authorization"].ToString();
-
-        if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
-        {
-            token = authorizationHeader.Substring("Bearer ".Length).Trim();
-        }
-
-        return token;
     }
 }

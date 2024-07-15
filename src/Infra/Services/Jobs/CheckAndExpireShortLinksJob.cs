@@ -1,14 +1,17 @@
-﻿using Domain.Interfaces.Repository.ShortLinks;
+﻿using Domain.Interfaces.Repository;
+using Domain.Interfaces.Repository.ShortLinks;
 using Hangfire;
 
 namespace Infra.Services.Jobs;
 
 public class CheckAndExpireShortLinksJob(
     IRecurringJobManager recurringJobManager,
-    IShortLinkRepository shortLinkRepository) : IJob
+    IShortLinkRepository shortLinkRepository,
+    IUnitOfWork unitOfWork) : IJob
 {
     private readonly IRecurringJobManager _recurringJobManager = recurringJobManager;
     private readonly IShortLinkRepository _shortLinkRepository = shortLinkRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
     public void RunJob()
     {
@@ -22,5 +25,6 @@ public class CheckAndExpireShortLinksJob(
         {
             item.ExpireShortLink();
         }
+        _unitOfWork.SaveChangesAsync();
     }
 }

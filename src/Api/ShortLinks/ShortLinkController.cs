@@ -11,17 +11,28 @@ namespace Api.ShortLinks
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class ShortLinkController(IMediator mediator) : ControllerBase
+    public class ShortLinkController(
+        IMediator mediator, 
+        IHttpContextAccessor httpContextAccessor) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Create([FromBody] CreateShortLinkCommand input)
+        public async Task<IActionResult> Create([FromBody] CreateShortLinkDTO input)
         {
-            var createResult = await _mediator.Send(input);
+            string userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "";
+            
+            var command = new CreateShortLinkCommand(
+                input.Name,
+                input.OriginUrl,
+                userName
+            );
+
+            var createResult = await _mediator.Send(command);
             return createResult.IsSuccess ?
-                   Ok(createResult.Data) :
+                   Ok(createResult.Data?.UniqueCode) :
                    BadRequest(createResult.Message);
         }
 
@@ -37,7 +48,7 @@ namespace Api.ShortLinks
 
         [HttpDelete]
         [Authorize]
-        public async Task<IActionResult> Delete([FromBody] DeleteShortLinkCommand input)
+        public async Task<IActionResult> Delete([FromQuery] DeleteShortLinkCommand input)
         {
             var result = await _mediator.Send(input);
             return result.IsSuccess ?
@@ -45,8 +56,8 @@ namespace Api.ShortLinks
                     BadRequest(result.Message);
         }
 
-        [HttpGet("UniqueCode/{code:regex(^[a-zA-Z0-9]*$)}")]// asp .net route constraint
-        public async Task<IActionResult> GetUniqueCode([FromQuery] GetUniqueCodeQuery input)
+        [HttpGet("/originUrl/{OriginUrl:regex(^[[a-zA-Z0-9]]*)}")]
+        public async Task<IActionResult> GetUniqueCode([FromRoute] GetUniqueCodeQuery input)
         {
             var result = await _mediator.Send(input);
             return result.IsSuccess ?
@@ -54,13 +65,13 @@ namespace Api.ShortLinks
                    NotFound();
         }
 
-        [HttpGet("OriginCode/{code:regex(^[a-zA-Z0-9]*$)}")]
-        public async Task<IActionResult> GetOriginUrl([FromQuery] GetOriginUrlQuery input)
+        [HttpGet("{UniqueCode:regex(^[[a-zA-Z0-9]]*)}")]
+        public async Task<IActionResult> GetOriginUrl([FromRoute] GetOriginUrlQuery input)
         {
             var result = await _mediator.Send(input);
             return result.IsSuccess && !string.IsNullOrEmpty(result.Data) ?
                    Redirect(result.Data) :
-                   RedirectPermanent("");
+                   RedirectPermanent("http://www.google.com");
         }
     }
 }

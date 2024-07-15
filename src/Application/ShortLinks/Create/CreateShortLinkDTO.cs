@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Application.ShortLinks.Create;
 
-public record CreateShortLinkCommand(string Name, string OriginUrl) : IRequest<Result<ShortLink>>;
+public record CreateShortLinkDTO(string Name, string OriginUrl) : IRequest<Result<ShortLink>>;

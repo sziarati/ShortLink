@@ -8,12 +8,12 @@ namespace Application.Authentication;
 
 public class JWTTokenBuilder
 {
-    private Claim[] Claims = [];
+    private List<Claim> Claims = new();
     private DateTime? ExpiresAt;
     private SigningCredentials signingCredentials;
     public JWTTokenBuilder AddClaim(Claim claim)
     {
-        Claims.Append(claim);
+        Claims.Add(claim);
         return this;
     }
     public JWTTokenBuilder ExpireAt(int hours)

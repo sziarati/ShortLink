@@ -1,3 +1,3 @@
 ﻿namespace Domain.Exceptions;
 
-public class InvalidPostalCodeException(string ParameterName) : DomainException($"PostalCode {ParameterName} Is not in a correct format!");
+public class InvalidPostalCodeException(string value) : DomainException($"PostalCode '{value}' Is invalid!");

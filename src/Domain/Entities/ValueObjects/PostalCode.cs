@@ -7,7 +7,7 @@ public record PostalCode
     public string Value { get; }
     public PostalCode(string value)
     {
-        Guard.AgainstInvalidPostalCode(value, nameof(value));
+        Guard.AgainstInvalidPostalCode(value);
         Value = value;
     }
     public override string ToString()

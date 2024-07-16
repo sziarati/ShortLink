@@ -1,44 +1,49 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Domain.Exceptions;
+using FluentValidation;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
-namespace Api.ExceptionHandler; //asp.net core 8 global exception handler
+namespace Api.ExceptionHandler;
 
 public class GlobalExceptionHandler(IHostEnvironment env, ILogger<GlobalExceptionHandler> logger)
     : IExceptionHandler
 {
     private const string UnhandledExceptionMsg = "An unhandled exception has occurred while executing the request.";
-
+    private const string ContentType = "application/problem+json";
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception,
         CancellationToken cancellationToken)
     {
         var problemDetails = CreateProblemDetails(context, exception);
-        var json = JsonSerializer.Serialize(problemDetails);
 
-        logger.Log(LogLevel.Error, json);
+        logger.Log(LogLevel.Error, JsonSerializer.Serialize(problemDetails));
 
-        const string contentType = "application/problem+json";
-        context.Response.ContentType = contentType;
-        await context.Response.WriteAsync(json, cancellationToken);
+        context.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = ContentType;
+        await context.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
         return true;
     }
 
     private ProblemDetails CreateProblemDetails(in HttpContext context, in Exception exception)
     {
+        if (exception is DomainException or ValidationException)
+        {
+            return new ProblemDetails
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Title = exception.Message,
+            };
+        }
+
         var statusCode = context.Response.StatusCode;
         var reasonPhrase = ReasonPhrases.GetReasonPhrase(statusCode);
-        if (string.IsNullOrEmpty(reasonPhrase))
-        {
-            reasonPhrase = UnhandledExceptionMsg;
-        }
 
         var problemDetails = new ProblemDetails
         {
             Status = statusCode,
-            Title = reasonPhrase,
+            Title = !string.IsNullOrEmpty(reasonPhrase) ? reasonPhrase : UnhandledExceptionMsg,
         };
 
         if (!env.IsDevelopment())

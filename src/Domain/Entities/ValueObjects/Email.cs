@@ -7,7 +7,7 @@ public class Email
     public string Value { get; }
     public Email(string value)
     {
-        Guard.AgainstInvalidEmail(value, nameof(value));
+        Guard.AgainstInvalidEmail(value);
         Value = value;
     }
     public override string ToString()

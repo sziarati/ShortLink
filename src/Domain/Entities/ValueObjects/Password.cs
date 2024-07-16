@@ -7,7 +7,7 @@ public record Password
     public string Value { get; }
     public Password(string value)
     {
-        Guard.AgainstInvalidPassword(value, nameof(value));
+        Guard.AgainstInvalidPassword(value);
         Value = value;
     }
 

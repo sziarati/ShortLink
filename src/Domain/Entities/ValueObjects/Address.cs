@@ -1,5 +1,4 @@
-﻿using Domain.Bases;
-
+﻿
 namespace Domain.Entities.ValueObjects
 {
     public record Address

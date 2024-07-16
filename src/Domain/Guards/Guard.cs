@@ -22,21 +22,21 @@ namespace Domain.Guards
         {
             if (string.IsNullOrWhiteSpace(email) || !EmailRegex.IsMatch(email))
             {
-                throw new InvalidEmailException($"{memberName} with value {email} in inValid");
+                throw new InvalidEmailException(email);
             }
         }
         public static void AgainstInvalidPassword(string password, [CallerMemberName]  string memberName = "")
         {
             if (string.IsNullOrWhiteSpace(password) || !PasswordRegex.IsMatch(password))
             {
-                throw new InvalidPasswordException($"{memberName} with value {password} in inValid");
+                throw new InvalidPasswordException();
             }
         }
         public static void AgainstInvalidPostalCode(string postalCode, [CallerMemberName] string memberName = "")
         {
             if (string.IsNullOrWhiteSpace(postalCode) || !PostalCodeRegex.IsMatch(postalCode))
             {
-                throw new InvalidPostalCodeException($"{memberName} with value {postalCode} in inValid");
+                throw new InvalidPostalCodeException(postalCode);
             }
         }
     }

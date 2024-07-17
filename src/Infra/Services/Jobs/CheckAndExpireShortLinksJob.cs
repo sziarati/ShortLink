@@ -25,6 +25,6 @@ public class CheckAndExpireShortLinksJob(
         {
             item.ExpireShortLink();
         }
-        _unitOfWork.SaveChangesAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 }

@@ -8,6 +8,9 @@ public class NotificationFactory(IServiceProvider serviceProvider)
     
     public INotificationStrategy GetStrategy(NotificationType notificationType)
     {
-        return _serviceProvider.GetRequiredKeyedService<INotificationStrategy>(notificationType);
+        using (var scope = _serviceProvider.CreateAsyncScope())
+        {
+            return scope.ServiceProvider.GetRequiredKeyedService<INotificationStrategy>(notificationType);
+        }
     }
 }

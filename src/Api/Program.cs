@@ -19,7 +19,10 @@ builder.Services.Configure<AppSettings>(builder.Configuration);
 builder.Services.RegisterApplicationServices(builder.Configuration);
 builder.Services.RegisterInfraServices(builder.Configuration);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(config =>
+{ 
+    config.Filters.Add(typeof(ResultFilter), 1);
+}) ;
 
 var app = builder.Build();
 

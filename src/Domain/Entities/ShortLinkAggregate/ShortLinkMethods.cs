@@ -49,7 +49,7 @@ public partial class ShortLink
         {
             ExpireDate = DateTime.Now;
             IsExpired = true;
-            AddEvent(new ShortLinkExpiredEvent(UniqueCode, User.UserName, User.Email.Value));
+            AddEvent(new NotifyUserShortLinkExpiredDomainEvent(UniqueCode, User.UserName, User.Email.Value));
         }
     }
     public void CheckAndExpireShortLink()

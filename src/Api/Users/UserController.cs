@@ -49,9 +49,7 @@ namespace Api.Users
         public async Task<IActionResult> Login([FromQuery] LoginUserCommand input)
         {
             var result = await _mediator.Send(input);
-            return result.IsSuccess ?
-                   Ok(result.Data) :
-                   BadRequest(result.Message);
+            return Ok(result);
         }
     }
 }

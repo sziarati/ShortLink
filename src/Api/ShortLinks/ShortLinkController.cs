@@ -1,4 +1,5 @@
-﻿using Application.ShortLinks.Create;
+﻿using Api.Bases;
+using Application.ShortLinks.Create;
 using Application.ShortLinks.Delete;
 using Application.ShortLinks.Expire;
 using Application.ShortLinks.GetOriginUrl;
@@ -11,23 +12,18 @@ namespace Api.ShortLinks
 {
     [ApiController]
     [Route("/api/[controller]")]
-    public class ShortLinkController(
-        IMediator mediator, 
-        IHttpContextAccessor httpContextAccessor) : ControllerBase
+    public class ShortLinkController(IMediator mediator) : BaseController
     {
         private readonly IMediator _mediator = mediator;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateShortLinkDTO input)
         {
-            string userName = _httpContextAccessor.HttpContext?.User?.Identity?.Name ?? "";
-            
             var command = new CreateShortLinkCommand(
                 input.Name,
                 input.OriginUrl,
-                userName
+                CurrentUserId
             );
 
             var createResult = await _mediator.Send(command);

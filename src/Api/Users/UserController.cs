@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Users
 {
     [ApiController]
+    [ResultFilter]
     [Route("/api/[controller]")]
     public class UserController(IMediator mediator, INotificationService notificationService) : ControllerBase
     {
@@ -20,9 +21,7 @@ namespace Api.Users
         {
             await notificationService.Notify("", "", NotificationType.Email);
             var createResult = await _mediator.Send(input);
-            return createResult.IsSuccess ?
-                   Created("/api/User", createResult.Data) :
-                   BadRequest(createResult.Message);
+            return Ok(createResult);
         }
 
         [HttpDelete]
@@ -30,9 +29,7 @@ namespace Api.Users
         public async Task<IActionResult> Delete([FromQuery] DeleteUserCommand input)
         {
             var result = await _mediator.Send(input);
-            return result.IsSuccess ?
-                    Ok() :
-                    BadRequest(result.Message);
+            return Ok(result);
         }
 
         [HttpPut]
@@ -40,9 +37,7 @@ namespace Api.Users
         public async Task<IActionResult> ResetPassword([FromQuery] ResetPasswordCommand input)
         {
             var result = await _mediator.Send(input);
-            return result.IsSuccess ?
-                   Ok() :
-                   BadRequest(result.Message);
+            return Ok(result);
         }
 
         [HttpGet]

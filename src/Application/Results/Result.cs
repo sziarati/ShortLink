@@ -2,7 +2,6 @@
 
 public class Result<T>  : AppResult
 {
-    public Type DataType { get; set; } = typeof(T);
     public Result(bool isSuccess, Errors error) : base(isSuccess, error)
     {
 

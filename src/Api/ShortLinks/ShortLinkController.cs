@@ -17,6 +17,7 @@ namespace Api.ShortLinks
         private readonly IMediator _mediator = mediator;
 
         [HttpPost]
+        [ResultFilter]
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateShortLinkDTO input)
         {
@@ -27,38 +28,33 @@ namespace Api.ShortLinks
             );
 
             var createResult = await _mediator.Send(command);
-            return createResult.IsSuccess ?
-                   Ok(createResult.Data?.UniqueCode) :
-                   BadRequest(createResult.Message);
+            return Ok(createResult);
         }
 
         [HttpPut]
+        [ResultFilter]
         [Authorize]
         public async Task<IActionResult> Expire([FromBody] ExpireShortLinkCommand input)
         {
             var result = await _mediator.Send(input);
-            return result.IsSuccess ?
-                   Ok() :
-                   BadRequest(result.Message);
+            return Ok(result.IsSuccess);
         }
 
         [HttpDelete]
+        [ResultFilter]
         [Authorize]
         public async Task<IActionResult> Delete([FromQuery] DeleteShortLinkCommand input)
         {
             var result = await _mediator.Send(input);
-            return result.IsSuccess ?
-                    Ok() :
-                    BadRequest(result.Message);
+            return Ok(result);
         }
 
         [HttpGet("/originUrl/{OriginUrl:regex(^[[a-zA-Z0-9]]*)}")]
+        [ResultFilter]
         public async Task<IActionResult> GetUniqueCode([FromRoute] GetUniqueCodeQuery input)
         {
             var result = await _mediator.Send(input);
-            return result.IsSuccess ?
-                   Ok(result) :
-                   NotFound();
+            return Ok(result);
         }
 
         [HttpGet("{UniqueCode:regex(^[[a-zA-Z0-9]]*)}")]

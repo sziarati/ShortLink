@@ -21,7 +21,7 @@ builder.Services.RegisterInfraServices(builder.Configuration);
 
 builder.Services.AddControllers(config =>
 { 
-    config.Filters.Add(typeof(ResultFilter), 1);
+    config.Filters.Add(typeof(ResultFilter), 1 /*order*/);
 }) ;
 
 var app = builder.Build();

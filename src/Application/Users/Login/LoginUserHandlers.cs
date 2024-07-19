@@ -14,6 +14,6 @@ public class LoginUserHandlers(
     public async Task<Result<string>> Handle(LoginUserCommand request, CancellationToken cancellationToken)
     {
         var loginResult = await authenticationService.Login(request.UserName, new Password(request.Password));
-        return loginResult.IsSuccess ? Result<string>.Success(loginResult.Data) : Result<string>.Failure(Errors.LoginFailedError);
+        return loginResult;
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 public class ResultFilter : ActionFilterAttribute
 {
-    public void OnResultExecuting(ResultExecutingContext context)
+    public override Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
     {
         var result = context.Result;
         if (result is ObjectResult objectResult && objectResult.Value is AppResult appResult)
@@ -20,10 +20,7 @@ public class ResultFilter : ActionFilterAttribute
                 context.Result = new OkObjectResult(data);
             }
         }
-    }
 
-    public void OnResultExecuted(ResultExecutedContext context)
-    {
-        // This method runs after the result is executed
+        return base.OnResultExecutionAsync(context, next);
     }
 }

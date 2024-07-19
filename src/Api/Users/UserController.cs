@@ -12,14 +12,13 @@ namespace Api.Users
     [ApiController]
     [ResultFilter]
     [Route("/api/[controller]")]
-    public class UserController(IMediator mediator, INotificationService notificationService) : ControllerBase
+    public class UserController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserCommand input)
         {
-            await notificationService.Notify("", "", NotificationType.Email);
             var createResult = await _mediator.Send(input);
             return Ok(createResult);
         }

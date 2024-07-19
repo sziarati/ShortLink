@@ -1,4 +1,4 @@
-﻿using Domain.Events.ShortLinkExpired;
+﻿using Domain.Events;
 
 namespace Domain.Bases;
 

@@ -1,5 +1,5 @@
 ﻿using Application.Notification;
-using Domain.Events.ShortLinkExpired;
+using Domain.Events;
 using MediatR;
 
 namespace Application.ShortLinks.Expired;

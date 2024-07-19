@@ -1,4 +1,4 @@
-﻿using Domain.Events.ShortLinkExpired;
+﻿using Domain.Events;
 using System.Text;
 
 namespace Domain.Entities.ShortLinkAggregate;

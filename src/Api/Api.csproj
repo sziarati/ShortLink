@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Compile Remove="ExceptionHandler\ExceptionMiddleware.cs" />
+    <Compile Remove="Users\UserController.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,7 +3,7 @@ using Domain.Events;
 using MediatR;
 
 namespace Application.ShortLinks.Expired;
-public class CourseCompletedDomainEventHandler(INotificationService notificationService) : INotificationHandler<NotifyUserShortLinkExpiredDomainEvent>
+public class NotifyUserShortLinkExpiredDomainEventHandler(INotificationService notificationService) : INotificationHandler<NotifyUserShortLinkExpiredDomainEvent>
 {
     private readonly INotificationService _notificationService = notificationService;
 

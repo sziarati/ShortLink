@@ -40,7 +40,7 @@ namespace Api.Users
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login([FromQuery] LoginUserCommand input)
+        public async Task<IActionResult> Login([FromQuery] LoginUserQuery input)
         {
             var result = await _mediator.Send(input);
             return Ok(result);

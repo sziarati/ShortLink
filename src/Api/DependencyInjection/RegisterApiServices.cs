@@ -1,4 +1,5 @@
 ﻿using Api.ExceptionHandler;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace Api.DependencyInjection;
@@ -7,6 +8,7 @@ public static class DependencyExtension
 {
     public static IServiceCollection RegisterApiServices(this IServiceCollection services)
     {
+        services.AddOptions<Authentications>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
         services.AddEndpointsApiExplorer();

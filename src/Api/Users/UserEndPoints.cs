@@ -36,7 +36,7 @@ namespace Api.Users
                 return Results.Ok(result);
             });
 
-            endpointRouteBuilder.MapGet("/api/User", async ([FromBody] LoginUserQuery input) =>
+            endpointRouteBuilder.MapGet("/api/User", async ([AsParameters] LoginUserQuery input) =>
             {
                 var result = await mediator.Send(input);
                 return Results.Ok(result);

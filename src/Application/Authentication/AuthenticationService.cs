@@ -12,10 +12,10 @@ public class AuthenticationService : IAuthenticationService
     private readonly IUserRepository _userRepository;
     private readonly Authentications _authenticationConfigs;
 
-    public AuthenticationService(IUserRepository userRepository, IOptions<FeatureConfigurations> options)
+    public AuthenticationService(IUserRepository userRepository, IOptions<Authentications> options)
     {
         _userRepository = userRepository;
-        _authenticationConfigs = options.Value.Authentications;
+        _authenticationConfigs = options.Value;
     }
 
     public async Task<Result<string>> Login(string userName, Password password)

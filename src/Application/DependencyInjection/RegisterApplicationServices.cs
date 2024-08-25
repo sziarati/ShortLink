@@ -19,7 +19,9 @@ public static class DependencyExtension
     public static IServiceCollection RegisterApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<AppSettings>(configuration);
-        services.Configure<FeatureConfigurations>(configuration.GetSection("FeatureConfigurations"));
+        //services.Configure<FeatureConfigurations>(configuration.GetSection("FeatureConfigurations"));
+        services.Configure<Authentications>(configuration.GetSection("FeatureConfigurations:Authentications"));
+        //services.Configure<FeatureConfigurations>(configuration.GetSection(nameof(FeatureConfigurations)));
 
         var featureConfigurations = new FeatureConfigurations();
         configuration

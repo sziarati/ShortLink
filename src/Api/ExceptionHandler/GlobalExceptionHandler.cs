@@ -17,7 +17,7 @@ public class GlobalExceptionHandler(IHostEnvironment env, ILogger<GlobalExceptio
     {
         var problemDetails = CreateProblemDetails(context, exception);
 
-        logger.Log(LogLevel.Error, JsonSerializer.Serialize(problemDetails));
+        logger.LogError("{problemDetails}", JsonSerializer.Serialize(problemDetails));
 
         context.Response.StatusCode = problemDetails.Status ?? StatusCodes.Status500InternalServerError;
         context.Response.ContentType = ContentType;

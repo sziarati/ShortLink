@@ -11,6 +11,9 @@ builder.Services.Configure<AppSettings>(builder.Configuration);
 builder.Services.RegisterApplicationServices(builder.Configuration);
 builder.Services.RegisterInfraServices(builder.Configuration);
 
+builder.Logging.AddConsole();
+builder.Logging.AddSeq();
+
 var app = builder.Build();
 
 app.UseExceptionHandler();
